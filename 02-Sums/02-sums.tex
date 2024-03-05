@@ -681,4 +681,354 @@
 \end{sol}
 \subsection*{Homework}
 
+\begin{ex}{19}
+	Use a summation factor to solve the recurrence
+	\begin{align*}
+		 T_0&=5\\
+		2T_n&=nT_{n-1}+3\cdot n!,\quad \text{ for } n>0.
+	\end{align*}
+\end{ex}
+
+\begin{sol}
+	Recall that given a sequence of the form
+	\[
+	a_nT_n=b_nT_{n-1}+c_n,\quad n>0,
+	\]
+	we can solve by multiplying by a summation factor $s_n$, chosen
+	so that 
+	\[
+	s_nb_n=s_{n-1}a_{n-1}.
+	\]
+	The solution then becomes
+	\begin{align*}
+		T_n=\frac{1}{s_na_n}\left(s_1b_1T_0+\sum_{k=1}^{n}s_kc_k\right).
+	\end{align*}
+	For the given recurrence, we have $a_n=2$, and $b_n=n$. Therefore,
+	we want $s_n$ that satisfies
+	\begin{align*}
+		s_n\cdot n=s_{n-1}\cdot2
+		\quad\iff\quad
+		s_n=\frac{2}{n}s_{n-1},\quad n>0
+	\end{align*}
+	By unfolding the recurrence, we see that the appropriate factor is
+	\begin{align*}
+		s_n=\frac{2}{n}s_{n-1}
+		=\frac{2^2}{n(n-1)}s_{n-2}
+		=\frac{2^3}{n(n-1)(n-2)}s_{n-3}=\cdots
+		=\frac{2^{n-1}}{n!}s_1.
+	\end{align*}
+	We pick $s_1=1$. Hence, $s_1b_1=1$, and $S_na_n=\frac{2^{n}}{n!}$, so
+	\begin{align*}
+		T&=\frac{n!}{2^{n}}\left(5+3\sum_{k=1}^{n}\frac{2^{k-1}}{k!}\cdot k!\right)\\
+		&=\frac{n!}{2^{n}}\left(5+3\sum_{1\leq k\leq n}2^{k-1}\right)\\
+		&=\frac{n!}{2^{n}}\left(5+3\sum_{1\leq k+1\leq n}2^{k}\right)\\
+		&=\frac{n!}{2^{n}}\left(5+3\sum_{0\leq k\leq n-1}2^{k}\right)\\
+		&=\frac{n!}{2^n}\left(5+3(2^{n}-1) \right)\\
+		&=n!\cdot (3+2^{n-1}).\\
+	\end{align*}
+\end{sol}
+
+\begin{ex}{20}
+	Try to evaluate $\sum_{k=0}^{n}k\mathcal{H}_k$ by the perturbation method, but deduce the
+	value of $\sum_{k=0}^{n}\mathcal{H}_k$ instead.
+\end{ex}
+
+\begin{sol}
+	Recall that if we have a series $S_n=\sum_{0\leq k\leq n}a_k$, then we
+	can re-write $S_{n+1}$ two different ways by splitting off the first and
+	last term:
+	\begin{align*}
+		S_n+a_{n+1}&=S_{n+1}\\
+		&=\sum_{0\leq k\leq n+1}a_k\\
+		&=a_0+\sum_{1\leq k\leq n+1}a_k\\
+		&=a_0+\sum_{1\leq k+1\leq n+1}a_{k+1}\\
+		&=a_0+\sum_{0\leq k\leq n}a_{k+1}.
+	\end{align*}
+	This is the basis of the perturbation method. We apply it to the given
+	series. Let $S_n=\sum_{k=0}^{n}k\mathcal{H}_k$. Then
+	\begin{align*}
+		\sum_{0\leq k\leq n}k\mathcal{H}_k+(n+1)\mathcal{H}_{n+1}
+		&=\sum_{0\leq k\leq n+1}k\mathcal{H}_{k}\\
+		&=0\cdot \mathcal{H}_0+\sum_{1\leq k\leq n+1}k\mathcal{H}_k\\
+		&=\sum_{1\leq k+1\leq n+1}(k+1)\mathcal{H}_{k+1}\\
+		&=\sum_{0\leq k\leq n}(k+1)\mathcal{H}_{k+1}\\
+		&=\sum_{0\leq k\leq n}k\mathcal{H}_{k+1}+\sum_{0\leq k\leq n}\mathcal{H}_{k+1}\\
+		&=\sum_{0\leq k\leq n}k\mathcal{H}_{k+1}+\sum_{1\leq k\leq n+1}\mathcal{H}_k\\
+		&=\sum_{0\leq k\leq n}k\mathcal{H}_{k+1}+\sum_{1\leq k\leq n}\mathcal{H}_k+\mathcal{H}_{n+1}
+	\end{align*}
+	Re-arranging, and noting that $\mathcal{H}_0=0$, we have:
+	\begin{align*}
+		\sum_{0\leq k\leq n}\mathcal{H}_k=\sum_{1\leq k\leq n}\mathcal{H}_k
+		&=n\mathcal{H}_{n+1}+\sum_{0\leq k\leq n}k(\mathcal{H}_k-\mathcal{H}_{k+1})\\
+		&=n\mathcal{H}_{n+1}-\sum_{0\leq k\leq n}k\cdot \frac{1}{k+1}\\
+		&=n\mathcal{H}_{n+1}-\sum_{0\leq k-1\leq n}(k-1)\cdot \frac{1}{k-1+1}\\
+		&=n\mathcal{H}_{n+1}+\sum_{1\leq k\leq n+1}\left(\frac{1}{k}-1\right)\\
+		&=n\mathcal{H}_{n+1}+\sum_{1\leq k\leq n+1}\frac{1}{k}-\sum_{1\leq k\leq n+1}1\\
+		&=n\mathcal{H}_{n+1}+\mathcal{H}_{n+1}-(n+1)\\
+		&=(n+1)\mathcal{H}_{n+1}-(n+1).
+	\end{align*}
+\end{sol}
+
+\begin{ex}{21}
+	Evaluate the sums $S_n=\sum_{k=0}^{n}(-1)^{n-k}$, $T_n=\sum_{k=0}^{n}(-1)^{n-k}k$,
+	and $U_n=\sum_{k=0}^{n}(-1)^{n-k}k^2$ by the perturbation method, assuming that
+	$n\geq 0$.
+\end{ex}
+
+\begin{sol}
+	First $S_n$:
+	\begin{align*}
+		\sum_{0\leq k\leq n}(-1)^{n-k}+(-1)^{n-(n+1)}&=T_{n+1}\\
+		&=(-1)^{n-0}+\sum_{k=0}^{n}(-1)^{n-(k+1)}\\
+		&=(-1)^n-\sum_{k=0}^{n}(-1)^{n-k}.
+	\end{align*}
+	By re-arranging, we get:
+	\begin{align*}
+		S_n=\sum_{k=0}^{n}(-1)^{n-k}=\frac{(-1)^n+1}{2}=\begin{cases}
+			1 & \text{ if } n \text{ is even}\\
+			0 & \text{ if } n \text{ is odd}
+		\end{cases}
+	\end{align*}
+	Next we work with $T_n$:
+	\begin{align*}
+		\sum_{k=0}^{n}(-1)^{n-k}k+(-1)^{n-(n+1)}(n+1)&=S_{n+1}\\
+		&=(-1)^{n-0}\cdot 0+\sum_{k=0}^{n}(-1)^{n-(k+1)}(k+1)\\
+		&=-\sum_{k=0}^{n}(-1)^{n-k}k-\sum_{k=0}^{n}(-1)^{n-k}\\
+		&=-\sum_{k=0}^{n}(-1)^{n-k}k - S_n.
+	\end{align*}
+	By re-arranging, we get
+	\begin{align*}
+		T_n&=\sum_{k=0}^{n}(-1)^{n-k}k=\frac{n+1-S_n}{2}.
+	\end{align*}
+	Finally, we evaluate $U_n$:
+	\begin{align*}
+		\sum_{k=0}^{n}(-1)^{n-k}k^2-(n+1)^2&=U_{n+1}\\
+		&=0+\sum_{k=0}^{n}(-1)^{n-(k+1)}(k+1)^2\\
+		&=-\sum_{k=0}^{n}(-1)^{n-k}k^2-2\sum_{k=0}^{n}(-1)^{n-k}k-\sum_{k=0}^{n}(-1)^{n-k}\\
+		&=-\sum_{k=0}^{n}(-1)^{n-k}k^2-2S_n-T_n.
+	\end{align*}
+	This results in
+	\begin{align*}
+		U_n=\frac{(n+1)^2-2S_n-T_n}{2}
+	\end{align*}
+\end{sol}
+
+\begin{ex}{22}
+	Prove \emph{Lagrange's identity} (without using induction):
+	\begin{align*}
+		\sum_{1\leq j < k\leq n}(a_jb_k-a_kb_j)^2
+		&=\left(\sum_{k=1}^{n}a_k^2\right)\left(\sum_{k=1}^{n}b_k^2\right)
+		-\left(\sum_{k=1}^{n}a_kb_k\right)^2.
+	\end{align*}
+	Prove, in fact, an identity for the more general double sum
+	\[
+	\sum_{1\leq j<k\leq n}\left(a_jb_k-a_kb_j\right)\left(A_jB_k-A_kB_j\right).
+	\]
+\end{ex}
+
+\begin{sol}
+	\
+	\begin{proof}
+		Let $T_n=\sum_{1\leq j<k\leq n}\left(a_jb_k-a_kb_j\right)\left(A_jB_k-A_kB_j\right)$.
+		Recall that
+		\[
+		[1\leq j<k\leq n]+[1\leq k<j\leq n]=[1\leq j, k\leq n]-[1\leq j=k\leq n].
+		\]
+		Then
+		\begin{align*}
+			2T_n&=\sum_{1\leq j<k\leq n}\left(a_jb_k-a_kb_j\right)\left(A_jB_k-A_kB_j\right)+
+			\sum_{1\leq k<j\leq n}\left(a_kb_j-a_jb_k\right)\left(A_kB_j-A_jB_k\right)\\
+			&=\sum_{j=1}^{n}\sum_{k=1}^{n}\left(a_jb_k-a_kb_j\right)\left(A_jB_k-A_kB_j\right)
+			-\sum_{k=1}^{n}\left(a_kb_k-a_kb_k\right)\left(A_kB_k-A_kB_k\right)\\
+			&=\sum_{j=1}^{n}\sum_{k=1}^{n}\left(
+			a_jA_jb_kB_k-a_jB_jb_kA_k-b_jA_ja_kB_k+b_jB_ja_kA_k
+			\right)\\
+			&=\left(\sum_{j=1}^{n}a_jA_j\right)\left(\sum_{k=1}^{n}b_kB_k\right)
+			-\left(\sum_{j=1}^{n}a_jB_j\right)\left(\sum_{k=1}^{n}b_kA_k\right)\\
+			&-\left(\sum_{j=1}^{n}b_jA_j\right)\left(\sum_{k=1}^{n}a_kB_k\right)
+			+\left(\sum_{j=1}^{n}b_jB_j\right)\left(\sum_{k=1}^{n}a_kA_k\right)\\
+			&=2\left(\sum_{k=1}^{n}a_kA_k\right)\left(\sum_{k=1}^{n}b_kB_k\right)
+			-2\left(\sum_{k=1}^{n}A_kb_k\right)\left(\sum_{k=1}^{n}a_kB_k\right).
+		\end{align*}
+		If we divide by 2, then
+		\begin{align*}
+			T_n&=\left(\sum_{k=1}^{n}a_kA_k\right)\left(\sum_{k=1}^{n}b_kB_k\right)
+			-\left(\sum_{k=1}^{n}A_kb_k\right)\left(\sum_{k=1}^{n}a_kB_k\right).
+		\end{align*}
+		Lagrange's identity then follows if we let $a_k=A_k$ and $b_k=B_k$.
+	\end{proof}
+\end{sol}'
+
+\begin{ex}{23}
+	Evaluate the sum $\sum_{k=1}^{n}(2k+1)/k(k+1)$ in two ways:
+	\begin{enumerate}[label=(\alph*)]
+		\item Replace $1/k(k+1)$ by the ``partial fractions" $1/k-1/(k+1)$.
+		\item Sum by parts.
+	\end{enumerate}
+\end{ex}
+
+\begin{sol}
+	\
+	\begin{enumerate}[label=(\alph*)]
+		\item Since
+		\[
+		\frac{1}{k(k+1)}=\frac{1}{k}-\frac{1}{k+1},
+		\]
+		we get
+		\begin{align*}
+			\sum_{1\leq k\leq n}\frac{2k+1}{k(k+1)}
+			&=\sum_{1\leq k\leq n}\frac{2k+1}{k}-\sum_{1\leq k\leq n}\frac{2k+1}{k+1}\\
+			&=\sum_{1\leq k\leq n}2+\sum_{1\leq k\leq n}\frac{1}{k}
+			-\sum_{1\leq k-1\leq n}\frac{2(k-1)+1}{(k-1)+1}\\
+			&=2n+\mathcal{H}_{n}-\sum_{2\leq k\leq n+1}\frac{2k-1}{k}\\
+			&=2n+\mathcal{H}_{n}-\sum_{2\leq k\leq n+1}2+\sum_{2\leq k\leq n+1}\frac{1}{k}\\
+			&=2n+\mathcal{H}_{n}-2n-\frac{1}{1}+\sum_{1\leq k\leq n+1}\frac{1}{k}\\
+			&=\mathcal{H}_n-1+\mathcal{H}_{n+1}\\
+			&=2\mathcal{H}_n-1+\frac{1}{n+1}\\
+			&=2\mathcal{H}_n-\frac{n}{n+1}.
+		\end{align*}
+		\item The summation by parts formula is
+		\begin{align*}
+			\sum u\Delta v=uv-\sum Ev\Delta u,
+		\end{align*}
+		where $E$ is the shift operator and $\Delta$ is the difference operator. That is,
+		$Ev(x)=v(x+1)$, and $\Delta u(x)=u(x+1)-u(x)$. Let
+		\begin{align*}
+			u&=2x+1,\quad \Delta v=\frac{1}{x(x+1)}=(x-1)^{\underline{-2}}\\
+			\Delta u&=\Delta(2x^{\underline{1}}+1)=2,\quad v=-(x-1)^{\underline{-1}}=-\frac{1}{x},\quad
+			Ev=-\frac{1}{x+1}.
+		\end{align*}
+		Hence
+		\begin{align*}
+			\sum \frac{2x+1}{x(x+1)}&=\sum u\Delta v\\
+			&=uv-\sum Ev\Delta u\\
+			&=-\frac{2x+1}{x}+\sum \frac{2}{x+1}\\
+			&=-\frac{2x+1}{x}+2\sum \Delta \mathcal{H}_x\\
+			&=-\frac{2x+1}{x}+2\mathcal{H}_k
+		\end{align*}
+		Now plugging in the bounds of integration:
+		\begin{align*}
+			\sum_{k=1}^{n}\frac{2k+1}{k(k+1)}
+			&=-\frac{2k+1}{k}\bigg\rvert_{1}^{n+1}+2\mathcal{H}_k\bigg\rvert_{1}^{n+1}\\
+			&=-\frac{2n+3}{n+1}+3+2\mathcal{H}_{n+1}-2\\
+			&=-\frac{2n+3}{n+1}+1+2\mathcal{H}_n+\frac{2}{n+1}\\
+			&=2\mathcal{H}_n+\frac{n+1}{n+1}+\frac{2}{n+1}-\frac{2n+3}{n+1}\\
+			&=2\mathcal{H}_n-\frac{n}{n+1}.
+		\end{align*}
+	\end{enumerate}
+\end{sol}
+
+\begin{ex}{24}
+	What is $\sum_{0\leq k<n}\mathcal{H}_k/(k+1)(k+2)$? \emph{Hint}: Generalize the derivation
+	of $(2.57)$
+\end{ex}
+
+\begin{sol}
+	Recall $x^{\underline{-2}}=\frac{1}{(x+1)(x+2)}$. Hence, our sum is
+	\begin{align*}
+		\sum \mathcal{H}_x x^{\underline{-2}}\, \delta x
+	\end{align*}
+	With the intent to use summation by parts, let
+	\begin{align*}
+		u&=\mathcal{H}_x,\quad \Delta v= \frac{1}{(x+1)(x+2)}=x^{\underline{-2}}\\
+		\Delta u&=x^{\underline{-1}}=\frac{1}{x+1},\quad v=-x^{\underline{-1}},\quad Ev=-\frac{1}{x+2}.
+	\end{align*}
+	Hence, using summation by parts:
+	\begin{align*}
+		\sum \mathcal{H}_x x^{\underline{-2}}\, \delta x
+		&=-\frac{\mathcal{H}_x}{x+1}+\sum\frac{1}{(x+1)(x+2)}\\
+		&=-\frac{\mathcal{H}_x}{x+1}+\sum x^{\underline{-2}}\,\delta x\\
+	\end{align*}
+	Now substituting the bounds, we get
+	\begin{align*}
+		\sum_{0\leq k<n}\frac{\mathcal{H}_k}{(k+1)(k+2)}&=-\frac{\mathcal{H}_k}{k+1}\bigg\rvert_{0}^{n}
+		+(-x^{\underline{-1}})\bigg\rvert_{0}^{n}\\
+		&=-\frac{\mathcal{H}_n}{n+1}+1-\frac{1}{n+1}\\
+		&=\frac{n-\mathcal{H}_n}{n+1}
+	\end{align*}
+\end{sol}
+
+\begin{ex}{25}
+	The notation $\prod_{k\in K}a_k$ means the product of the numbers $a_k$ for all
+	$k\in K$. Assume for simplicity that $a_k\neq 1$ for only finitely many $k$;
+	hence infinite products need not be defined. What laws does this $\prod$-notation
+	satisfy, analogous to the distributive, pairing, and commutative laws that
+	hold for $\sum$?
+\end{ex}
+
+\begin{sol}
+	If $b_k$ is another collection of numbers, then
+	\begin{align*}
+		\prod_{k\in K}(a_kb_k)=\left(\sum_{k\in K}a_k\right)\left(\prod_{k\in K}b_k\right).
+	\end{align*}
+	The commutative law works in the same way, that is, if $p$ is any permutation
+	of the elements in $K$, then
+	\begin{align*}
+		\prod_{k\in K}a_k=\prod_{p(k)\in K}a_k.
+	\end{align*}
+	Finally,
+	\begin{align*}
+		\prod_{k\in K}a_k^c=\left(\prod_{k\in K}a_k\right)^c.
+	\end{align*}
+\end{sol}
+
+\begin{ex}{26}
+	Express the double product $P=\prod_{1\leq j\leq k\leq n}a_{j}a_k$ in terms of the
+	single product $\prod_{k=1}^{n}a_k$ by manipulating the $\prod$-notation. (This
+	exercise gives a product analog of the upper-triangle identity (2.33).)
+\end{ex}
+
+\begin{sol}
+	\
+	Using the identity
+	\begin{align*}
+		[1\leq j\leq k\leq n][1\leq k\leq j\leq n]=[1\leq j,k\leq n][1\leq j=k\leq n],
+	\end{align*}
+	we can write
+	\begin{align*}
+		\left(\prod_{1\leq j\leq k\leq n}a_ja_k\right)^2
+		&=\prod_{1\leq k\leq n}\prod_{1\leq j\leq n}a_ja_k\cdot \prod_{1\leq k\leq n}a_k^2,
+	\end{align*}
+	which simplifies to
+	\begin{align*}
+		\left(\prod_{1\leq j\leq k\leq n}a_ja_k\right)^2
+		&=\left(\prod_{1\leq k\leq n}a_k\right)^{2n}\cdot \prod_{1\leq k\leq n}a_k^2\\
+		&=\left(\prod_{1\leq k\leq n} a_k\right)^{2n+2}
+		\end{align*}
+\end{sol}
+
+\begin{ex}{27}
+	Compute $\Delta (c^{\underline{x}})$, and use it to deduce the value of
+	$\sum_{k=1}^{n}(-2)^{\underline{k}}/k$.
+\end{ex}
+
+\begin{sol}
+	If $x$ is only allowed to be a positive integer, then
+	\begin{align*}
+		c^{\underline{x}}&=c(c-1)\cdots (c-(x-1)).
+	\end{align*}
+	Therefore
+	\begin{align*}
+		\Delta (c^{\underline{x}})&=c^{\underline{x+1}}-c^{\underline{x}}\\
+		&=c(c-1)\cdots(c-(x-1))(c-x)-c(c-1)\cdots(c-(x-1))\\
+		&=c^{\underline{x}}(c-x-1)\\
+		&=\frac{c^{\underline{x+2}}}{c-x}.
+	\end{align*}
+	In our case, $c=-2$, and
+	\begin{align*}
+		\Delta((-2)^{\underline{x-2}})=\frac{(-2)^{\underline{x}}}{-2-(x-2)}=-\frac{(-2)^{\underline{x}}}{x}.
+	\end{align*}
+	Therefore, we have
+	\begin{align*}
+		\sum_{k=1}^{n}\frac{(-2)^{\underline{k}}}{k}&=
+		-\sum_{k=1}^{n}\Delta \left((-2)^{\underline{k-2}}\right)\\
+		&=- (-2)^{\underline{k-2}}\bigg\rvert_{1}^{n+1}\\
+		&=(-2)^{\underline{-1}}-(-2)^{\underline{n-1}}\\
+		&=\frac{1}{-2+1}-(-2)(-2-1)(-2-2)\cdots(-2-(n-2))\\
+		&=-1-(-2)(-3)(-4)\cdots(-n)\\
+		&=(-1)^{n}n!-1.
+	\end{align*}
+\end{sol}
+
+
 \end{document}
